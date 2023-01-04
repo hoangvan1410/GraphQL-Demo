@@ -1,11 +1,13 @@
 const express = require('express');
 const graphqlHTTP = require('express-graphql').graphqlHTTP;
-const schema = require('./schema/schema')
-const app = express();
-
+const { neoSchema } = require('./schema/schema')
+//const app = express();
+const cors = require('cors');
 const mongoose = require('mongoose');
+const { Neo4jGraphQL } = require("@neo4j/graphql");
+const { ApolloServer } = require("apollo-server");
 
-mongoose.set('strictQuery',true)
+mongoose.set('strictQuery', true)
 mongoose.connect('mongodb+srv://admin:Admin1314@cluster0.psxk7h4.mongodb.net/graphql')
 
 mongoose.connection.once('open', () => {
@@ -14,14 +16,18 @@ mongoose.connection.once('open', () => {
 
 //This route will be used as an endpoint to interact with Graphql, 
 //All queries will go through this route. 
-app.use('/graphql', graphqlHTTP({
-    //Directing express-graphql to use this schema to map out the graph 
-    schema,
-    //Directing express-graphql to use graphiql when goto '/graphql' address in the browser
-    //which provides an interface to make GraphQl queries
-    graphiql:true
-}));
+// const schema = neoSchema.getSchema();
 
-app.listen(3000, () => {
-    console.log('Listening on port 3000');
-}); 
+async function main() {
+    const schema = await neoSchema.getSchema();
+    const server = new ApolloServer({
+        schema,
+        context: ({ req }) => ({ req }),
+    });
+    console.log("Online");
+    await server.listen(4000);
+
+    
+}
+
+main()

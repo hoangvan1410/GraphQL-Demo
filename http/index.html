@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>GraphQL Client</title>
+</head>
+
+<pre></pre>
+
+<body>
+    <script>
+        async function queryGraphQLServer() {
+            const response = await fetch('http://localhost:3000/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    query: '{ users { uuid mail userName} }',
+                }),
+            })
+            const data = await response.json()
+
+            // Append data to the pre tag
+            const pre = document.querySelector('pre')
+            pre.textContent = JSON.stringify(data, null, 2) // Pretty-print the JSON
+        }
+
+        queryGraphQLServer()
+    </script>
+</body>
+
+</html>

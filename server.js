@@ -7,12 +7,6 @@ const mongoose = require('mongoose');
 const { Neo4jGraphQL } = require("@neo4j/graphql");
 const { ApolloServer } = require("apollo-server");
 
-mongoose.set('strictQuery', true)
-mongoose.connect('mongodb+srv://admin:Admin1314@cluster0.psxk7h4.mongodb.net/graphql')
-
-mongoose.connection.once('open', () => {
-    console.log('conneted to database');
-});
 
 //This route will be used as an endpoint to interact with Graphql, 
 //All queries will go through this route. 
@@ -25,7 +19,7 @@ async function main() {
         context: ({ req }) => ({ req }),
     });
     console.log("Online");
-    await server.listen(4000);
+    await server.listen(4001);
 
     
 }

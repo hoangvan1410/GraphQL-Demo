@@ -183,9 +183,41 @@ const typeDefs = `
         name: String
         movies: [Movie!]! @relationship(type: "IN_GENRE", direction: IN)
     }
+
+    type User{
+        uuid: String,
+        mail: String,
+        userName: String
+        cars: [Car!]! @relationship(type: "OWN", direction: OUT)
+        friend: [User!]! @relationship(type: "FRIEND", direction: OUT)
+    }
+
+    type Car {
+        uuid: String
+        name: String
+        user: [User!]! @relationship(type: "OWN", direction: IN)
+    }
+
+    type Relationship {
+        start_labels: [String]
+        start_uuid: String
+        rel_type: String
+        end_labels: [String]
+        end_uuid: String
+    }
+    
+    type Query{
+        can_a_access_b(uuidA: String, uuidB: String): Boolean
+        @cypher(
+            statement: """
+            OPTIONAL MATCH (u:User{uuid:$uuidA}), (c:Car{uuid:$uuidB}),path = shortestpath((u)-[*]->(c)) 
+            return path IS NOT NULL
+            """
+        )
+    }
 `;
 
-const driver = neo4j.driver("bolt://localhost:7687", neo4j.auth.basic("neo4j", "letmein"));
+const driver = neo4j.driver("bolt://127.0.0.1:7687", neo4j.auth.basic("admin", "123"));
 
 module.exports.neoSchema = new Neo4jGraphQL({ typeDefs, driver });
 //Creating a new GraphQL Schema, with options query which defines query 

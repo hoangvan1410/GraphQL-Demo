@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@neo4j/graphql": "^3.14.1",
+    "@neo4j/graphql-ogm": "^3.14.1",
     "apollo-server": "^3.11.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",

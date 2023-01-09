@@ -214,10 +214,39 @@ const typeDefs = `
             return path IS NOT NULL
             """
         )
+
+        can_role_access_function(role_id: String, func_id: String): Boolean
+        @cypher(
+            statement: """
+            OPTIONAL MATCH (r:Role{role_id:$role_id}), (f:Function{func_id:$func_id}),path = shortestpath((r)-[*]->(f)) 
+            return path IS NOT NULL
+            """
+        )
     }
+
+    type Function{
+        func_id: String
+        func_code: String
+        func_name: String
+        role_func: [Role!]! @relationship(type: "CAN_DO", direction: IN)
+    }
+
+    type Role{
+        role_id: String
+        role_code: String
+        role_name: String
+        under_role: [Role!]! @relationship(type: "UNDER", direction: OUT)
+    }
+
+    type Staff{
+        staff_id: String
+        staff_name: String
+        role: [Role!]! @relationship(type: "ROLE", direction: OUT)
+    }
+
 `;
 
-const driver = neo4j.driver("bolt://127.0.0.1:7687", neo4j.auth.basic("admin", "123"));
+const driver = neo4j.driver("bolt://127.0.0.1:7687", neo4j.auth.basic("neo4j", "123"));
 
 module.exports.neoSchema = new Neo4jGraphQL({ typeDefs, driver });
 //Creating a new GraphQL Schema, with options query which defines query 

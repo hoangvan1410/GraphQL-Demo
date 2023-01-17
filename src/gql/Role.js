@@ -19,6 +19,7 @@ module.exports.RoleTypeDefs = gql`
             """
         )
     }
+    
 
     type Function{
         func_id: String
@@ -40,4 +41,12 @@ module.exports.RoleTypeDefs = gql`
         role: [Role!]! @relationship(type: "ROLE", direction: OUT)
     }
 
+    extend type Role
+        @auth(
+            rules: [
+                { operations: [CREATE], bind: { user: { id: "$jwt.sub" } } }
+                { operations: [UPDATE], allow: { id: "$jwt.sub" } , bind: { id: "$jwt.sub" } } 
+                { operations: [DELETE], allow: { id: "$jwt.sub" } }
+            ]
+        )
 `;

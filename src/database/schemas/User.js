@@ -1,12 +1,7 @@
-const { RESOLVER } = require('awilix')
-const { Schema } = require('mongoose')
+// const { RESOLVER } = require('awilix')
+const mongoose = require('mongoose')
 
-const userSchema = new Schema({
-    fullName: {
-        type: String,
-        trim: true,
-        required: true
-    },
+const userSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
@@ -14,7 +9,7 @@ const userSchema = new Schema({
         trim: true,
         required: true
     },
-    hash_password: {
+    password: {
         type: String,
         required: true
     },
@@ -24,13 +19,10 @@ const userSchema = new Schema({
     }
 })
 
-userSchema.methods.comparePassword = function(password) {
-    return bcrypt.compareSync(password, this.hash_password);
-  };
 
-const userModel = ({ database: mongoose }) => mongoose.model('User', userSchema)
-module.exports = userModel
+//const userModel = ({ database: mongoose }) => mongoose.model('User', userSchema)
+module.exports = mongoose.model('user', userSchema)
 
-userModel[RESOLVER] = {
-    name: 'UserSchema'
-}
+// userModel[RESOLVER] = {
+//     name: 'UserSchema'
+// }

@@ -18,6 +18,8 @@ module.exports.RoleTypeDefs = gql`
             OPTIONAL MATCH (f:Function)<-[:CAN_DO]-(r:Role) WHERE (:Role{role_id:$role_id})-[*]->(r) return distinct f
             """
         )
+
+       
     }
     
 
@@ -50,3 +52,7 @@ module.exports.RoleTypeDefs = gql`
             ]
         )
 `;
+ // map(phone,contract)
+        // @cypher(
+        //     match (c:Contract), (p:Phone) Where c.app_id= p.app_id Merge (c)-[:HAS_PHONE]->(p)
+        // )

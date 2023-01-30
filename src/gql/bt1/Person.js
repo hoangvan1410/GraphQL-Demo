@@ -12,7 +12,7 @@ module.exports.PersonTypeDefs = gql`
         can_bob_borrow_mike(name1:String, name2:String):Car
         @cypher(
             statement: """
-            OPTIONAL MATCH (c:Car)<-[rel:OWN]-(p1:Person{name:$name1})-[rel2:HAS_FRIEND OR LOVE]->(p2:Person{name:$name2}) 
+            OPTIONAL MATCH (c:Car)<-[rel:OWN]-(p1:Person{name:$name1})-[rel2:HAS_FRIEND|LOVES]->(p2:Person{name:$name2}) 
             return c 
             """
         )

@@ -1,36 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>GraphQL Client</title>
-</head>
+  </head>
 
-<pre></pre>
+  <pre></pre>
 
-<body>
+  <body>
     <script>
-        async function queryGraphQLServer() {
-            const response = await fetch('http://localhost:4001/graphql', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    query: 'query {movies {title genres {name}}}',
-                }),
-            })
-            const data = await response.json()
+      async function queryGraphQLServer() {
+        const response = await fetch("http://localhost:4001/graphql", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query: `
+            query Can_bob_borrow_mike($name1: String, $name2: String) {
+                can_bob_borrow_mike(name1: $name1, name2: $name2) {
+                    car_id
+                }
+            }
+            `,
+            variables: {
+                name1: "Mike",
+                name2: "Bob"
+            },
+          }),
+        });
+        const data = await response.json();
 
-            // Append data to the pre tag
-            const pre = document.querySelector('pre')
-            pre.textContent = JSON.stringify(data, null, 2) // Pretty-print the JSON
-        }
+        // Append data to the pre tag
+        const pre = document.querySelector("pre");
+        pre.textContent = JSON.stringify(data, null, 2); // Pretty-print the JSON
+      }
 
-        queryGraphQLServer()
+      queryGraphQLServer();
     </script>
-</body>
-
+  </body>
 </html>
